@@ -1,0 +1,50 @@
+version: '3'
+services:
+  elasticsearch56-db-search:
+    image: "elasticsearch:5.6"
+    hostname: elastic56
+    container_name: elastic56
+    environment:
+    - cluster.name=hyper-elastic
+    - "ES_JAVA_OPTS=-Xms512m -Xmx1024m"
+    ports:
+    - "9200:9200"
+    - "9300:9300"
+    logging:
+      driver: json-file
+      options:
+        max-size: "50"
+        max-file: "4"
+
+  rabbitmq:
+    image: "rabbitmq:management"
+    container_name: rabbit
+    hostname: rabbit
+    logging:
+      driver: json-file
+      options:
+        max-size: "50"
+        max-file: "4"
+    ports:
+    - "15672:15672"
+    - "5672:5672"
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    hostname: mongo
+    ports:
+    - "27017:27017"
+    logging:
+      driver: json-file
+      options:
+        max-size: "50"
+        max-file: "4"
+
+  mongo-express:
+    image: "mongo-express:latest"
+    container_name: mongo-express
+    depends_on:
+    - 'mongo'
+    ports:
+    - "8081:8081"
